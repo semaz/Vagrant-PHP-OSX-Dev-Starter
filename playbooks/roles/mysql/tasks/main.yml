@@ -1,0 +1,6 @@
+---
+- name: Install MySQL
+  apt: name=mysql-server state=present
+
+- name: Create MySQL user
+  mysql_user: name=dev password=dev priv=*.*:ALL state=present

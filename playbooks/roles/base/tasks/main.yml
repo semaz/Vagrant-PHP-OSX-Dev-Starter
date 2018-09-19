@@ -1,0 +1,20 @@
+- name: Install required base packages
+  apt: name={{ item }} state=present
+  with_items:
+    - curl
+    - git
+    - wget
+    - nano
+    - vim
+    - python-mysqldb
+    - zip
+    - unzip
+
+- name: Fix curl
+  apt: name=libcurl4-gnutls-dev state=present
+
+#- name: Fix curl - create symbolic link
+#  file:
+#    src: "/usr/include/x86_64-linux-gnu/curl"
+#    dest: "/usr/local/include/curl"
+#    state: link

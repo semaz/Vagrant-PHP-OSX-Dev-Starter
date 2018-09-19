@@ -1,0 +1,79 @@
+---
+- name: Add apt key for PHP ppa
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 14AA40EC0831756756D7F66C4F4EA0AAE5267A6C
+    state: present
+
+- name: Add apt repository for PHP
+  apt_repository: repo='ppa:ondrej/php/ubuntu'
+
+- name: Install python-software-properties
+  apt: name=python-software-properties state=present
+
+- name: Install required php packages
+  apt: name={{ item }} state=present
+  with_items:
+    - php{{ php_version }}
+    - php{{ php_version }}-mysql
+    - php{{ php_version }}-intl
+    - php{{ php_version }}-curl
+    - php{{ php_version }}-fpm
+    - php{{ php_version }}-cli
+    - php{{ php_version }}-mcrypt
+    - php{{ php_version }}-mbstring
+    - php{{ php_version }}-dom
+    - php{{ php_version }}-gmp
+    - php{{ php_version }}-apcu
+    - php{{ php_version }}-bcmath
+    - php{{ php_version }}-zip
+    - php{{ php_version }}-dev
+    - php{{ php_version }}-gd
+    - php-memcached
+    - php-imagick
+    - php-xdebug
+    - php-pear
+    - php-yaml
+    - percona-toolkit
+    - pkg-config
+    - memcached
+
+- name: Enable the MCrypt extension
+  shell: phpenmod mcrypt
+
+- name: Copy php fpm config
+  copy: src=fpm.ini dest=/etc/php/7.1/fpm/conf.d/030-custom.ini
+
+- name: Copy php cli config
+  copy: src=cli.ini dest=/etc/php/7.1/cli/conf.d/030-custom.ini
+
+- name: Copy fpm config
+  copy: src=www.conf dest=/etc/php/7.1/fpm/pool.d/www.conf
+
+- name: Install composer
+  shell: curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+
+- name: Configure composer cache directory to avoid using slow NFS
+  shell: composer config --global cache-dir /dev/shm/composer/cache
+
+- name: Update pecl
+  shell: pecl channel-update pecl.php.net
+
+- name: Check pecl apcu installed
+  command: pecl list | grep apcu
+  register: pecl_apcu
+
+- name: Install pecl apcu
+  shell: pecl install apcu;
+  when: pecl_apcu  == ""
+
+- name: Check pecl imagick installed
+  command: pecl list | grep imagick
+  register: pecl_imagick
+
+- name: Install pecl imagick
+  shell: pecl install imagick;
+  when: pecl_imagick  == ""
+
+- name: Set correct owner
+  shell: chown -R www-data:www-data /var/www

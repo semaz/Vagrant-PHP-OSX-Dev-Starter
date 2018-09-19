@@ -1,0 +1,8 @@
+- name: Autoremove
+  shell: apt-get autoremove -y && apt-get clean
+
+- name: Clean
+  shell: rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+
+- name: Set logs dir rights
+  shell: chmod -R 0777 /var/log/
