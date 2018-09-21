@@ -10,6 +10,9 @@
     - zip
     - unzip
 
+- name: Copy .bashrc file
+  copy: src=bashrc dest=/home/vagrant/.bashrc
+
 - name: Fix curl
   apt: name=libcurl4-gnutls-dev state=present
 

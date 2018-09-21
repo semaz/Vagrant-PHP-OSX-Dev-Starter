@@ -1,0 +1,24 @@
+---
+- stat:
+    path: /var/wwwxhprof
+  register: check_xhprof
+
+- name: Create directories
+  shell: mkdir -p /tmp/xhprof && mkdir -p /var/www/xhprof
+  when: check_xhprof.stat.exists == False
+
+- name: Clone xhprof repo
+  git:
+    repo: https://github.com/longxinH/xhprof
+    dest: /var/www/xhprof
+    version: master
+
+- name: Install
+  shell: cd /var/www/xhprof/extension && phpize && ./configure && make && make install
+  when: check_xhprof.stat.exists == False
+
+- name: Copy php fpm config
+  copy: src=xhprof.ini dest=/etc/php/7.1/fpm/conf.d/030-xhprof.ini
+  when: check_xhprof.stat.exists == False
+  notify:
+      - restart php-fpm

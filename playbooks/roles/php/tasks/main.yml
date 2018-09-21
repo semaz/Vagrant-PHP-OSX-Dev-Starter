@@ -77,3 +77,5 @@
 
 - name: Set correct owner
   shell: chown -R www-data:www-data /var/www
+  notify:
+      - restart php-fpm

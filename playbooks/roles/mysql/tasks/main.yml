@@ -4,3 +4,6 @@
 
 - name: Create MySQL user
   mysql_user: name=dev password=dev priv=*.*:ALL state=present
+
+- name: Copy mysqld.cnf config
+  copy: src=mysqld.cnf dest=/etc/mysql/conf.d/mysqld.cnf
