@@ -19,8 +19,7 @@ Vagrant.configure(2) do |config|
 
   # network
   config.vm.network "forwarded_port", guest: 80, host: 80
-  #config.vm.network "forwarded_port", guest: 3306, host: 3306
-  config.vm.network "private_network", ip: "192.168.50.4"
+  config.vm.network "private_network", ip: "192.168.100.10"
 
   # sync
   config.vm.synced_folder "~/Sites", "/var/www/html", type: "virtualbox"
