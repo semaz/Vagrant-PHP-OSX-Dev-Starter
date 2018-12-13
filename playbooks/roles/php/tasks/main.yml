@@ -1,54 +1,66 @@
 ---
-- name: Add apt key for PHP ppa
-  apt_key:
-    keyserver: keyserver.ubuntu.com
-    id: 14AA40EC0831756756D7F66C4F4EA0AAE5267A6C
-    state: present
-
 - name: Add apt repository for PHP
-  apt_repository: repo='ppa:ondrej/php/ubuntu'
+  become: yes
+  apt_repository: repo='ppa:ondrej/php'
+
+- name: Update apt packages
+  become: true
+  apt:
+    update_cache: yes
 
 - name: Install python-software-properties
-  apt: name=python-software-properties state=present
+  apt:
+    name:
+      - python-software-properties
+      - software-properties-common
+    state: present
+    autoclean: yes
 
 - name: Install required php packages
-  apt: name={{ item }} state=present
-  with_items:
-    - php{{ php_version }}
-    - php{{ php_version }}-mysql
-    - php{{ php_version }}-intl
-    - php{{ php_version }}-curl
-    - php{{ php_version }}-fpm
-    - php{{ php_version }}-cli
-    - php{{ php_version }}-mcrypt
-    - php{{ php_version }}-mbstring
-    - php{{ php_version }}-dom
-    - php{{ php_version }}-gmp
-    - php{{ php_version }}-apcu
-    - php{{ php_version }}-bcmath
-    - php{{ php_version }}-zip
-    - php{{ php_version }}-dev
-    - php{{ php_version }}-gd
-    - php-memcached
-    - php-imagick
-    - php-xdebug
-    - php-pear
-    - php-yaml
-    - percona-toolkit
-    - pkg-config
-    - memcached
+  apt:
+    name:
+      - php{{ php_version }}
+      - php{{ php_version }}-mysql
+      - php{{ php_version }}-intl
+      - php{{ php_version }}-curl
+      - php{{ php_version }}-fpm
+      - php{{ php_version }}-cli
+      - php{{ php_version }}-mbstring
+      - php{{ php_version }}-dom
+      - php{{ php_version }}-gmp
+      - php{{ php_version }}-apcu
+      - php{{ php_version }}-bcmath
+      - php{{ php_version }}-zip
+      - php{{ php_version }}-dev
+      - php{{ php_version }}-gd
+      - php-memcached
+      - php-imagick
+      - php-xdebug
+      - php-pear
+      - php-yaml
+      - percona-toolkit
+      - pkg-config
+      - memcached
+      - libmcrypt-dev
+    state: present
+    autoclean: yes
 
-- name: Enable the MCrypt extension
-  shell: phpenmod mcrypt
+- name: Check pecl mcrypt installed
+  command: pecl list | grep mcrypt
+  register: pecl_mcrypt
+
+- name: Install pecl mcrypt
+  shell: pecl install mcrypt-1.0.1;
+  when: pecl_mcrypt  == ""
 
 - name: Copy php fpm config
-  copy: src=fpm.ini dest=/etc/php/7.1/fpm/conf.d/030-custom.ini
+  copy: src=fpm.ini dest=/etc/php/{{ php_version }}/fpm/conf.d/030-custom.ini
 
 - name: Copy php cli config
-  copy: src=cli.ini dest=/etc/php/7.1/cli/conf.d/030-custom.ini
+  copy: src=cli.ini dest=/etc/php/{{ php_version }}/cli/conf.d/030-custom.ini
 
 - name: Copy fpm config
-  copy: src=www.conf dest=/etc/php/7.1/fpm/pool.d/www.conf
+  copy: src=www.conf dest=/etc/php/{{ php_version }}/fpm/pool.d/www.conf
 
 - name: Install composer
   shell: curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
@@ -76,6 +88,6 @@
   when: pecl_imagick  == ""
 
 - name: Set correct owner
-  shell: chown -R vagrant:vagrant /var/www
+  file: path=/var/www owner=vagrant group=vagrant state=directory
   notify:
-      - restart php-fpm
+    - restart php-fpm

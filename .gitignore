@@ -4,3 +4,7 @@
 
 .DS_Store
 ._.DS_Store
+
+playbooks/roles/nginx/files/sites-enabled/
+!playbooks/roles/nginx/files/sites-enabled/test.conf
+!playbooks/roles/nginx/files/sites-enabled/default.conf

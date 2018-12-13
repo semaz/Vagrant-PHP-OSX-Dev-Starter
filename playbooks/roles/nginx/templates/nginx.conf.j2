@@ -71,6 +71,10 @@ http {
         return 301 $scheme://$1$request_uri ;
     }
 
+    upstream php {
+        server unix:/var/run/php/php7.2-fpm.sock;
+    }
+
 	include /etc/nginx/conf.d/*.conf;
 	include /etc/nginx/sites-enabled/*.conf;
 }

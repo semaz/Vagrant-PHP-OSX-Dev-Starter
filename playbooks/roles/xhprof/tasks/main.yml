@@ -1,11 +1,19 @@
 ---
 - stat:
-    path: /var/wwwxhprof
+    path: /var/www/xhprof
   register: check_xhprof
 
-- name: Create directories
-  shell: mkdir -p /tmp/xhprof && mkdir -p /var/www/xhprof
-  when: check_xhprof.stat.exists == False
+- name: Creates tmp directory
+  file:
+    path: /tmp/xhprof
+    state: directory
+    recurse: yes
+
+- name: Creates www directory
+  file:
+    path: /var/www/xhprof
+    state: directory
+    recurse: yes
 
 - name: Clone xhprof repo
   git:
@@ -18,7 +26,7 @@
   when: check_xhprof.stat.exists == False
 
 - name: Copy php fpm config
-  copy: src=xhprof.ini dest=/etc/php/7.1/fpm/conf.d/030-xhprof.ini
+  copy: src=xhprof.ini dest=/etc/php/{{ php_version }}/fpm/conf.d/030-xhprof.ini
   when: check_xhprof.stat.exists == False
   notify:
       - restart php-fpm

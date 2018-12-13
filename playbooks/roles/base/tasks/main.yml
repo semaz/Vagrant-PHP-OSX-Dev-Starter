@@ -1,14 +1,16 @@
 - name: Install required base packages
-  apt: name={{ item }} state=present
-  with_items:
-    - curl
-    - git
-    - wget
-    - nano
-    - vim
-    - python-mysqldb
-    - zip
-    - unzip
+  apt:
+    name:
+      - curl
+      - git
+      - wget
+      - nano
+      - vim
+      - python-mysqldb
+      - zip
+      - unzip
+    state: present
+    autoclean: yes
 
 - name: Copy .bashrc file
   copy: src=bashrc dest=/home/vagrant/.bashrc
