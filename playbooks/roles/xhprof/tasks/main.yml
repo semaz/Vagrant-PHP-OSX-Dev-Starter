@@ -20,6 +20,7 @@
     repo: https://github.com/longxinH/xhprof
     dest: /var/www/xhprof
     version: master
+  when: check_xhprof.stat.exists == False
 
 - name: Install
   shell: cd /var/www/xhprof/extension && phpize && ./configure && make && make install

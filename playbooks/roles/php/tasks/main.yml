@@ -1,13 +1,4 @@
 ---
-- name: Add apt repository for PHP
-  become: yes
-  apt_repository: repo='ppa:ondrej/php'
-
-- name: Update apt packages
-  become: true
-  apt:
-    update_cache: yes
-
 - name: Install python-software-properties
   apt:
     name:
@@ -50,7 +41,7 @@
   register: pecl_mcrypt
 
 - name: Install pecl mcrypt
-  shell: pecl install mcrypt-1.0.1;
+  shell: pecl install mcrypt-1.0.1
   when: pecl_mcrypt  == ""
 
 - name: Copy php fpm config

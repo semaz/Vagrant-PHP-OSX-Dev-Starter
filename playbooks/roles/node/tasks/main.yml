@@ -57,7 +57,7 @@
   shell: curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - && apt-get install -y nodejs
 
 - name: Install npm and packages
-  shell: npm install -g npm && npm install -g svgo && npm install -g --unsafe-perm puppeteer
+  shell: npm install -g npm && npm install -g yarn && npm install -g svgo && npm install -g --unsafe-perm puppeteer
 
 - name: Add node symlink
   file:
