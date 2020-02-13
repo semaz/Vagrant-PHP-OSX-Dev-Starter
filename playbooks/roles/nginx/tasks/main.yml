@@ -8,6 +8,9 @@
 - name: Copy mime
   copy: src=mime.types dest=/etc/nginx/mime.types
 
+- name: Copy ssl params
+  copy: src=ssl-params.conf dest=/etc/nginx/ssl-params.conf
+
 - name: Copy vhosts
   copy: src=sites-enabled dest=/etc/nginx/
 
@@ -17,3 +20,6 @@
     dest=/etc/nginx/nginx.conf
   notify:
     - restart nginx
+
+- name: Create tls certificate
+  shell: sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com"

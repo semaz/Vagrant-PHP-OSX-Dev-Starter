@@ -1,6 +1,6 @@
 ---
 - name: Install MySQL
-  apt: name=mysql-server state=present
+  apt: name=percona-toolkit state=present
 
 - name: Create MySQL user
   mysql_user: name=dev password=dev priv=*.*:ALL state=present

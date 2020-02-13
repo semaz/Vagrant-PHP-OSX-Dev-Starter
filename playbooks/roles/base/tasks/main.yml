@@ -14,9 +14,9 @@
       - wget
       - nano
       - vim
-      - python-mysqldb
       - zip
       - unzip
+#      - multitail
       - cachefilesd
     state: present
     autoclean: yes

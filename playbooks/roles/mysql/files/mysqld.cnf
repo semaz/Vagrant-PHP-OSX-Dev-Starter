@@ -1,2 +1,43 @@
 [mysqld]
-bind-address = 0.0.0.0
+pid-file	= /var/run/mysqld/mysqld.pid
+socket		= /var/run/mysqld/mysqld.sock
+datadir		= /var/lib/mysql
+#log-error	= /var/log/mysql/error.log
+
+init_connect='SET collation_connection = utf8_general_ci'
+init_connect='SET NAMES utf8'
+#init_connect="SET sql_mode=(SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))"
+sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+character-set-server=utf8
+collation-server=utf8_general_ci
+skip-character-set-client-handshake
+
+bind-address = *
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+
+max_allowed_packet=256M
+general_log=1
+general_log_file=/var/log/mysql/mysqld.log
+
+[mysqldump]
+max_allowed_packet=256M
+
+[client]
+default_character_set = utf8
+
+[mysql]
+default-character-set=utf8
+no-auto-rehash
+max_allowed_packet=256M
+connect_timeout=2
+
+[mysql.server]
+user=mysql
+basedir=/var/lib
+skip-networking
+
+[safe_mysqld]
+err-log=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+skip-networking

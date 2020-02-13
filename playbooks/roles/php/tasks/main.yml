@@ -26,7 +26,7 @@
       - php{{ php_version }}-gd
       - php-memcached
       - php-imagick
-      - php-xdebug
+#      - php-xdebug
       - php-pear
       - php-yaml
       - percona-toolkit
@@ -45,10 +45,10 @@
   when: pecl_mcrypt  == ""
 
 - name: Copy php fpm config
-  copy: src=fpm.ini dest=/etc/php/{{ php_version }}/fpm/conf.d/030-custom.ini
+  copy: src=custom.ini dest=/etc/php/{{ php_version }}/fpm/conf.d/030-custom.ini
 
 - name: Copy php cli config
-  copy: src=cli.ini dest=/etc/php/{{ php_version }}/cli/conf.d/030-custom.ini
+  copy: src=custom.ini dest=/etc/php/{{ php_version }}/cli/conf.d/030-custom.ini
 
 - name: Copy fpm config
   copy: src=www.conf dest=/etc/php/{{ php_version }}/fpm/pool.d/www.conf
