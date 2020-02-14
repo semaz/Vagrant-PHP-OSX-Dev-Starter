@@ -19,7 +19,6 @@
       - php{{ php_version }}-mbstring
       - php{{ php_version }}-dom
       - php{{ php_version }}-gmp
-      - php{{ php_version }}-apcu
       - php{{ php_version }}-bcmath
       - php{{ php_version }}-zip
       - php{{ php_version }}-dev
@@ -61,14 +60,6 @@
 
 - name: Update pecl
   shell: pecl channel-update pecl.php.net
-
-- name: Check pecl apcu installed
-  command: pecl list | grep apcu
-  register: pecl_apcu
-
-- name: Install pecl apcu
-  shell: pecl install apcu;
-  when: pecl_apcu  == ""
 
 - name: Check pecl imagick installed
   command: pecl list | grep imagick
