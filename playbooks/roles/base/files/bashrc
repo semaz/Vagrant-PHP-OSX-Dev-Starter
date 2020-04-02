@@ -14,8 +14,8 @@ alias ll='ls -la'
 command_exists () { type "$1" &> /dev/null ; }
 
 tf() {
-    if command_exists multitail; then
-        multitail -c "$@"
+    if command_exists lnav; then
+        lnav "$@"
     else
         tail -f "$@"
     fi

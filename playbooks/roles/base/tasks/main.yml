@@ -19,7 +19,7 @@
       - vim
       - zip
       - unzip
-#      - multitail
+      - lnav
       - cachefilesd
     state: present
     autoclean: yes
@@ -32,3 +32,6 @@
 
 - name: Fix curl
   apt: name=libcurl4-gnutls-dev state=present
+
+- name: Disable ssh welcome message
+  shell: touch ~/.hushlogin
