@@ -25,6 +25,7 @@ alias ~="cd ~"
 alias cd..='cd ..'
 alias ..='cd ..'
 
+alias cmp="composer"
 alias sf="php bin/console"
 alias cept="php vendor/bin/codecept"
 alias phinx="php vendor/bin/phinx"
